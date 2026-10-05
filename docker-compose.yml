@@ -2,13 +2,9 @@ services:
 
   n8n:
     build: .
-    container_name: n8n
     restart: unless-stopped
-    ports:
-      - "5678:5678"
 
     environment:
-      # PostgreSQL - Coolify
       DB_TYPE: postgresdb
       DB_POSTGRESDB_HOST: ${DB_POSTGRESDB_HOST}
       DB_POSTGRESDB_PORT: ${DB_POSTGRESDB_PORT}
@@ -16,26 +12,21 @@ services:
       DB_POSTGRESDB_USER: ${DB_POSTGRESDB_USER}
       DB_POSTGRESDB_PASSWORD: ${DB_POSTGRESDB_PASSWORD}
 
-      # n8n
       N8N_HOST: ${N8N_HOST}
       N8N_PORT: 5678
       N8N_PROTOCOL: ${N8N_PROTOCOL}
       N8N_EDITOR_BASE_URL: ${N8N_EDITOR_BASE_URL}
       WEBHOOK_URL: ${WEBHOOK_URL}
 
-      # Zona horaria
       GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
       TZ: ${TZ}
 
-      # Autenticación
       N8N_BASIC_AUTH_ACTIVE: "true"
       N8N_BASIC_AUTH_USER: ${N8N_BASIC_AUTH_USER}
       N8N_BASIC_AUTH_PASSWORD: ${N8N_BASIC_AUTH_PASSWORD}
 
-      # Seguridad
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
 
-      # Gotenberg
       GOTENBERG_URL: ${GOTENBERG_URL}
 
     volumes:
@@ -48,13 +39,11 @@ services:
 
   gotenberg:
     image: gotenberg/gotenberg:8
-    container_name: gotenberg
     restart: unless-stopped
 
 
   evolution-redis:
     image: redis:7-alpine
-    container_name: evolution_redis
     restart: unless-stopped
 
     command:
@@ -74,11 +63,7 @@ services:
 
   evolution-api:
     image: evoapicloud/evolution-api:2.3.7
-    container_name: evolution_api
     restart: unless-stopped
-
-    ports:
-      - "8080:8080"
 
     depends_on:
       evolution-redis:
